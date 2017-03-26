@@ -108,19 +108,51 @@ OK
 6) "1"
 ```
 
+## Redis Sets
 
+```
+> sadd myset 1 2 3
+(integer) 3
+> smembers myset
+1. 3
+2. 1
+3. 2
 
+> sismember myset 3
+(integer) 1
+> sismember myset 30
+(integer) 0
+```
 
+## Redis Sorted Sets
 
+在Sets的基础上给每个元素增加一个浮点数用于排序
 
+```C
+/* ZSETs use a specialized version of Skiplists */
+typedef struct zskiplistNode {
+    sds ele;
+    double score;
+    struct zskiplistNode *backward;
+    struct zskiplistLevel {
+        struct zskiplistNode *forward;
+        unsigned int span;
+    } level[];
+} zskiplistNode;
 
+typedef struct zskiplist {
+    struct zskiplistNode *header, *tail;
+    unsigned long length;
+    int level;
+} zskiplist;
 
+typedef struct zset {
+    dict *dict;
+    zskiplist *zsl;
+} zset;
+```
 
-
-
-
-
-
+看样子是把相同的数据按两种数据结构存了两份
 
 
 
