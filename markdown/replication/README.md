@@ -24,6 +24,16 @@ Redis采用主从模式进行数据备份，数据从server端复制给slave端�
 
 主节点再内存中创建一个backlog，保存当前所有的修改操作，从节点在复制的时候所需要的数据根据主节点的运行ID和偏移值来确定，ID能对应的上，就按偏移值传送数据，对不上，就只能复制全数据集
 
+```C
+struct redisServer {
+  // ... ignore some codes
+  char *repl_backlog;             /* Replication backlog for partial syncs */
+  long long repl_backlog_size;    /* Backlog circular buffer size */
+  long long repl_backlog_histlen; /* Backlog actual data length */
+  long long repl_backlog_idx;     /* Backlog circular buffer current offset,
+                                   that is the next byte will'll write to.*/
+};
+```
 
 ## 只读节点
 
